@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -128,25 +128,25 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {message}',
-            'style': '{',
+        'standard': {
+            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
         },
     },
     'handlers': {
-        'file': {  
+        'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': 'debug.log',
-            'formatter': 'verbose',
+            'filename': 'app.log',
+            'formatter': 'standard',
         },
         'console': {
+            'level': 'INFO',
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
+            'formatter': 'standard',
         },
     },
     'root': {
-        'handlers': ['console','file'],
+        'handlers': ['file', 'console'],
         'level': 'INFO',
     },
 }

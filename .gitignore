@@ -1,11 +1,19 @@
+# Security (CRITICAL)
+.env
 
-venv/
-env/
+# Database & Logs
+db.sqlite3
+*.log
+debug.log
+app.log
+
+# Python & Virtual Environment
 __pycache__/
 *.pyc
-.DS_Store
+virtual_env/
+venv/
+env/
 
-# trial files
-advanced_demo.py
-debug_google.html
-debug.log
+# OS Junk
+.DS_Store
+Thumbs.db
