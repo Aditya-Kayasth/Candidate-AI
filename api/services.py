@@ -4,11 +4,15 @@ import requests
 import google.generativeai as genai
 import logging
 from bs4 import BeautifulSoup
-import json
+from dotenv import load_dotenv  # <--- NEW LINE
+
+# Load the .env file
+load_dotenv()  # <--- NEW LINE
 
 # Config
 logger = logging.getLogger(__name__)
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+api_key = os.getenv("GEMINI_API_KEY") # Matches your .env file name
+genai.configure(api_key=api_key)
 
 def search_candidates_core(skill, experience, location="remote", limit=5):
     """
@@ -41,7 +45,7 @@ def search_candidates_core(skill, experience, location="remote", limit=5):
         return {"error": "Failed to retrieve candidate data from source."}
 
     # 2. AI Parsing with Retry (Backoff)
-    model = genai.GenerativeModel('gemini-pro')
+    model = genai.GenerativeModel('gemini-2.5-flash')
     prompt = f"""
     Act as a recruiter. Extract {limit} candidates from this raw text.
     Return ONLY a raw JSON list. No markdown formatting.

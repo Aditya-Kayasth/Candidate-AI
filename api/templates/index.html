@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Scout | AI Search</title>
+    <style>
+        :root { --primary: #2563eb; --bg: #f8fafc; --surface: #ffffff; --text: #1e293b; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); padding: 40px 20px; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        
+        /* Header */
+        header { text-align: center; margin-bottom: 40px; }
+        h1 { margin: 0; color: var(--primary); letter-spacing: -1px; }
+        p { color: #64748b; margin-top: 5px; }
+
+        /* Search Box */
+        .search-card { background: var(--surface); padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .full { grid-column: span 2; }
+        
+        label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; color: #475569; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; }
+        
+        button { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 20px; width: 100%; transition: opacity 0.2s; }
+        button:hover { opacity: 0.9; }
+        button:disabled { background: #94a3b8; cursor: wait; }
+
+        /* Results */
+        #results { margin-top: 30px; display: grid; gap: 15px; }
+        .card { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.05); animation: fadeIn 0.3s ease; }
+        .card h3 { margin: 0 0 5px 0; font-size: 1.1rem; }
+        .meta { font-size: 0.9rem; color: #64748b; margin-bottom: 10px; }
+        .score { float: right; background: #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+        
+        .error { color: #ef4444; text-align: center; margin-top: 10px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Candidate Scout AI</h1>
+        <p>Smart Resume Parsing & Search</p>
+    </header>
+
+    <div class="search-card">
+        <form id="searchForm">
+            <div class="grid">
+                <div>
+                    <label>Skill / Role</label>
+                    <input type="text" id="skill" placeholder="e.g. Python Developer" required>
+                </div>
+                <div>
+                    <label>Experience (Years)</label>
+                    <input type="number" id="experience" placeholder="3" required>
+                </div>
+                <div>
+                    <label>Location</label>
+                    <input type="text" id="location" placeholder="Remote">
+                </div>
+                <div>
+                    <label>Results Limit</label>
+                    <select id="limit">
+                        <option value="5">5 Candidates</option>
+                        <option value="10">10 Candidates</option>
+                    </select>
+                </div>
+                <div class="full">
+                    <button type="submit" id="btn">Find Candidates</button>
+                </div>
+            </div>
+        </form>
+        <div id="error" class="error"></div>
+    </div>
+
+    <div id="results"></div>
+</div>
+
+<script>
+    document.getElementById('searchForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btn');
+        const container = document.getElementById('results');
+        const err = document.getElementById('error');
+        
+        // UI Loading
+        btn.disabled = true;
+        btn.textContent = "AI is analyzing...";
+        container.innerHTML = '';
+        err.textContent = '';
+
+        const payload = {
+            skill: document.getElementById('skill').value,
+            experience: document.getElementById('experience').value,
+            location: document.getElementById('location').value,
+            limit: document.getElementById('limit').value
+        };
+
+        try {
+            const res = await fetch('/api/candidates/search', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+
+            if (data.error) throw new Error(data.error);
+
+            // Render
+            const list = data.data || [];
+            if (list.length === 0) throw new Error("No candidates found.");
+
+            list.forEach(c => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <span class="score">${c.match_score || '?'}% Match</span>
+                    <h3>${c.name || 'Candidate'}</h3>
+                    <div class="meta">${c.title || 'N/A'} • ${c.location || 'Unknown'} • ${c.years_exp || 0} Yrs Exp</div>
+                    <div>${c.summary || ''}</div>
+                `;
+                container.appendChild(card);
+            });
+
+        } catch (e) {
+            err.textContent = e.message;
+        } finally {
+            btn.disabled = false;
+            btn.textContent = "Find Candidates";
+        }
+    });
+</script>
+</body>
+</html>

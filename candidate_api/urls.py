@@ -15,9 +15,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+from api.views import CandidateSearchView, dashboard
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),
+    # Frontend Dashboard
+    path('', dashboard, name='home'),
+    # API Endpoint
+    path('api/candidates/search', CandidateSearchView.as_view(), name='search'),
 ]
