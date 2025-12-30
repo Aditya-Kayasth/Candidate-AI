@@ -1,0 +1,240 @@
+:root {
+    --bg-dark: #121212;
+    --bg-panel: #1e1e1e;
+    --bg-card: #252525;
+    --primary-red: #d32f2f;
+    --primary-red-hover: #b71c1c;
+    --text-white: #e0e0e0;
+    --text-gray: #a0a0a0;
+    --border: #333333;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-white);
+    height: 100vh;
+    overflow: hidden; /* Prevent body scroll, let panels scroll */
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    height: 100%;
+}
+
+/* Sidebar Styles */
+.search-panel {
+    background-color: var(--bg-panel);
+    border-right: 1px solid var(--border);
+    padding: 30px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.brand {
+    margin-bottom: 40px;
+    border-bottom: 2px solid var(--primary-red);
+    padding-bottom: 15px;
+}
+
+.brand h1 {
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+.highlight {
+    color: var(--primary-red);
+}
+
+.brand p {
+    font-size: 0.8rem;
+    color: var(--text-gray);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-gray);
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+input {
+    width: 100%;
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border);
+    color: var(--text-white);
+    padding: 12px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+input:focus {
+    border-color: var(--primary-red);
+}
+
+.split-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+button {
+    background-color: var(--primary-red);
+    color: white;
+    border: none;
+    padding: 15px;
+    width: 100%;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 20px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: var(--primary-red-hover);
+}
+
+button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
+
+/* Results Area */
+.results-area {
+    padding: 40px;
+    overflow-y: auto;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+
+.status-bar {
+    font-family: monospace;
+    color: var(--text-gray);
+    font-size: 0.9rem;
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* Card Styles - Boxy & Professional */
+.card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--primary-red); /* The "Red Theme" accent */
+    padding: 25px;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    border-color: #444;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-white);
+}
+
+.card-exp {
+    background: #333;
+    padding: 2px 8px;
+    font-size: 0.75rem;
+    color: var(--text-white);
+    height: fit-content;
+}
+
+.card-meta {
+    font-size: 0.85rem;
+    color: var(--primary-red);
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.card-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 15px;
+}
+
+.skill-tag {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #ccc;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+}
+
+.card-summary {
+    font-size: 0.9rem;
+    color: #bbb;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    height: 60px; /* Limit height */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-actions {
+    border-top: 1px solid #333;
+    padding-top: 15px;
+    text-align: right;
+}
+
+.btn-link {
+    text-decoration: none;
+    color: var(--text-white);
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid var(--text-gray);
+    padding: 8px 16px;
+    transition: all 0.2s;
+}
+
+.btn-link:hover {
+    background: var(--text-white);
+    color: var(--bg-dark);
+}

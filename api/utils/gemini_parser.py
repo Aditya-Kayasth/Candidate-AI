@@ -13,7 +13,7 @@ genai.configure(api_key=GOOGLE_API_KEY)
 
 def parse_resume_html(html_content):
     try:
-        model = genai.GenerativeModel('gemini-2.0-flash', 
+        model = genai.GenerativeModel('gemini-2.5-flash', 
             generation_config={"response_mime_type": "application/json"}
         )
 

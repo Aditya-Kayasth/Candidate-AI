@@ -1,32 +1,40 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import render
-from .services import search_candidates_core
-import json
+from .scrapers.postjobfree_llm import search_and_process
+import logging
+
+logger = logging.getLogger(__name__)
 
 class CandidateSearchView(APIView):
     def post(self, request):
-        # Extract payload
-        skill = request.data.get('skill')
-        experience = request.data.get('experience')
-        location = request.data.get('location', 'remote')
-        limit = request.data.get('limit', 5)
+        params = {
+            "all_words": request.data.get('all_words', '').strip(),
+            "experience": request.data.get('experience', '').strip(),
+            "location": request.data.get('location', 'India').strip(),
+            "radius": request.data.get('radius', 50),
+            "limit": request.data.get('limit', 10)
+        }
 
-        if not skill:
-            return Response({"error": "Skill required"}, status=400)
+        if not params['all_words']:
+             return Response(
+                 {"error": "Skill parameter is required."}, 
+                 status=400
+             )
 
-        # Call Service
-        result = search_candidates_core(skill, experience, location, limit=limit)
+        try:
+            data = search_and_process(params)
+            
+            result = {
+                "status": "success",
+                "count": len(data),
+                "candidates": data
+            }
+            return Response(result)
 
-        # Parse JSON string from AI if success
-        if result.get('status') == 'success':
-            try:
-                result['data'] = json.loads(result['data'])
-            except:
-                pass # Return raw text if JSON parse fails
+        except Exception as e:
+            logger.error(f"View Error: {e}")
+            return Response({"error": "Internal Server Error"}, status=500)
 
-        return Response(result)
-
-# We will use this in the next commit
 def dashboard(request):
     return render(request, 'index.html')
