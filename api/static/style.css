@@ -20,16 +20,15 @@ body {
     background-color: var(--bg-dark);
     color: var(--text-white);
     height: 100vh;
-    overflow: hidden; /* Prevent body scroll, let panels scroll */
+    overflow: hidden;
 }
 
 .container {
-    display: grid;
-    grid-template-columns: 350px 1fr;
+    display: flex;
     height: 100%;
+    position: relative;
 }
 
-/* Sidebar Styles */
 .search-panel {
     background-color: var(--bg-panel);
     border-right: 1px solid var(--border);
@@ -37,6 +36,13 @@ body {
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    width: 350px;
+    transition: margin-left 0.4s ease;
+    flex-shrink: 0;
+}
+
+.search-panel.collapsed {
+    margin-left: -350px;
 }
 
 .brand {
@@ -51,9 +57,7 @@ body {
     font-weight: 700;
 }
 
-.highlight {
-    color: var(--primary-red);
-}
+.highlight { color: var(--primary-red); }
 
 .brand p {
     font-size: 0.8rem;
@@ -62,10 +66,7 @@ body {
     letter-spacing: 2px;
 }
 
-/* Form Styles */
-.form-group {
-    margin-bottom: 20px;
-}
+.form-group { margin-bottom: 20px; }
 
 label {
     display: block;
@@ -86,15 +87,7 @@ input {
     transition: border-color 0.2s;
 }
 
-input:focus {
-    border-color: var(--primary-red);
-}
-
-.split-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
+input:focus { border-color: var(--primary-red); }
 
 button {
     background-color: var(--primary-red);
@@ -111,117 +104,149 @@ button {
     transition: background 0.3s;
 }
 
-button:hover {
-    background-color: var(--primary-red-hover);
-}
+button:hover { background-color: var(--primary-red-hover); }
+button:disabled { background-color: #555; cursor: not-allowed; }
 
-button:disabled {
-    background-color: #555;
-    cursor: not-allowed;
-}
-
-/* Results Area */
-.results-area {
+.results-area { 
+    flex-grow: 1;
     padding: 40px;
-    overflow-y: auto;
+    transition: width 0.4s ease;
+    overflow-y: auto; 
 }
 
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 30px;
     border-bottom: 1px solid var(--border);
     padding-bottom: 20px;
 }
 
-h2 {
-    font-size: 1.5rem;
-    font-weight: 400;
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
+
+h2 { font-size: 1.5rem; font-weight: 400; }
 
 .status-bar {
     font-family: monospace;
     color: var(--text-gray);
     font-size: 0.9rem;
+    margin-top: 10px;
 }
 
 .results-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-/* Card Styles - Boxy & Professional */
 .card {
     background-color: var(--bg-card);
     border: 1px solid var(--border);
-    border-left: 4px solid var(--primary-red); /* The "Red Theme" accent */
-    padding: 25px;
-    transition: transform 0.2s;
-}
-
-.card:hover {
-    transform: translateY(-2px);
-    border-color: #444;
+    border-left: 4px solid var(--primary-red);
+    padding: 20px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    position: relative;
 }
 
 .card-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 15px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.card-main-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
 .card-title {
     font-size: 1.1rem;
     font-weight: 700;
     color: var(--text-white);
-}
-
-.card-exp {
-    background: #333;
-    padding: 2px 8px;
-    font-size: 0.75rem;
-    color: var(--text-white);
-    height: fit-content;
+    margin-right: 15px;
 }
 
 .card-meta {
-    font-size: 0.85rem;
-    color: var(--primary-red);
-    margin-bottom: 15px;
-    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-gray);
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.badge {
+    background: #333;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: var(--text-white);
 }
 
 .card-skills {
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
-    margin-bottom: 15px;
+    gap: 8px;
+    margin: 10px 0;
 }
 
 .skill-tag {
     background: #1a1a1a;
     border: 1px solid #333;
     color: #ccc;
-    padding: 4px 8px;
+    padding: 3px 8px;
     font-size: 0.75rem;
+    border-radius: 12px;
 }
 
 .card-summary {
     font-size: 0.9rem;
     color: #bbb;
     line-height: 1.5;
-    margin-bottom: 20px;
-    height: 60px; /* Limit height */
+    max-height: 0;
     overflow: hidden;
-    text-overflow: ellipsis;
+    transition: max-height 0.4s ease-out;
+}
+
+.card-summary.expanded {
+    max-height: 500px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.toggle-details-btn {
+    background: none;
+    border: none;
+    color: var(--primary-red);
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 0;
+    margin-top: 5px;
+    text-align: left;
+    width: fit-content;
+}
+
+.toggle-details-btn:hover {
+    text-decoration: underline;
 }
 
 .card-actions {
+    display: none;
     border-top: 1px solid #333;
     padding-top: 15px;
     text-align: right;
+}
+
+.card-summary.expanded + .card-actions {
+    display: block;
 }
 
 .btn-link {
@@ -237,4 +262,59 @@ h2 {
 .btn-link:hover {
     background: var(--text-white);
     color: var(--bg-dark);
+}
+
+.sidebar-toggle-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--primary-red);
+    color: white;
+    border: none;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    cursor: pointer;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+.progress-container {
+    width: 100%;
+    height: 4px;
+    background-color: #333;
+    margin-top: 10px;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: var(--primary-red);
+    width: 0%;
+    transition: width 0.5s ease;
+}
+
+.progress-bar.loading {
+    width: 100%;
+    background: repeating-linear-gradient(
+        45deg,
+        var(--primary-red),
+        var(--primary-red) 10px,
+        #b71c1c 10px,
+        #b71c1c 20px
+    );
+    background-size: 200% 200%;
+    animation: stripeMove 2s linear infinite;
+}
+
+@keyframes stripeMove {
+    0% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }

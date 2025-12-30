@@ -9,8 +9,10 @@
 </head>
 <body>
 
+    <button id="sidebarToggle" class="sidebar-toggle-btn">☰ Filters</button>
+
     <div class="container">
-        <aside class="search-panel">
+        <aside class="search-panel" id="searchPanel">
             <div class="brand">
                 <h1>CANDIDATE<span class="highlight">.AI</span></h1>
                 <p>Fast Resume Search</p>
@@ -33,7 +35,14 @@
 
         <main class="results-area">
             <header>
-                <h2 id="resultCount">Ready to search</h2>
+                <div class="header-top">
+                    <h2 id="resultCount">Ready to search</h2>
+                </div>
+                
+                <div class="progress-container" id="progressContainer" style="display:none;">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                
                 <div class="status-bar" id="statusBar">Waiting for input...</div>
             </header>
 
