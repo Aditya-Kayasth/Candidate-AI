@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Profile</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body class="detail-page">
+
+    <nav class="detail-nav">
+        <a href="/" class="back-link">← Back to Search</a>
+        <div class="brand-small">CANDIDATE<span class="highlight">.AI</span></div>
+    </nav>
+
+    <div class="container detail-container">
+        <aside class="profile-sidebar">
+            <div class="profile-header">
+                <div class="avatar-placeholder" id="avatarLetter">?</div>
+                <h1 id="detName">Loading...</h1>
+                <p id="detTitle" class="highlight-text">...</p>
+            </div>
+
+            <div class="info-block">
+                <label>Location</label>
+                <p id="detLocation">-</p>
+            </div>
+
+            <div class="info-block">
+                <label>Experience</label>
+                <p id="detExp">-</p>
+            </div>
+
+            <div class="action-area">
+                <a id="detLink" href="#" target="_blank" class="contact-btn">CONTACT CANDIDATE ↗</a>
+            </div>
+        </aside>
+
+        <main class="profile-main">
+            <section class="detail-section">
+                <h2>Technical Skills</h2>
+                <div id="detSkills" class="skills-grid"></div>
+            </section>
+
+            <section class="detail-section">
+                <h2>Professional Summary</h2>
+                <div id="detSummary" class="text-content"></div>
+            </section>
+
+            <section class="detail-section">
+                <h2>Education</h2>
+                <div id="detEducation" class="text-content"></div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Load data from Session Storage
+        document.addEventListener("DOMContentLoaded", () => {
+            const data = JSON.parse(sessionStorage.getItem('selectedCandidate'));
+            if (!data) {
+                window.location.href = '/'; 
+                return;
+            }
+
+            // Fill Data
+            document.getElementById('detName').innerText = data.name || "Hidden Candidate";
+            document.getElementById('detTitle').innerText = data.current_job_title || "No Title";
+            document.getElementById('detLocation').innerText = data.location || "India";
+            document.getElementById('detExp').innerText = (data.experience_years || '0') + " Years";
+            document.getElementById('detLink').href = data.resume_url;
+            document.getElementById('avatarLetter').innerText = (data.name || "?").charAt(0).toUpperCase();
+
+            // Skills
+            const skills = data.skills || [];
+            document.getElementById('detSkills').innerHTML = skills.length 
+                ? skills.map(s => `<span class="skill-pill">${s}</span>`).join('') 
+                : "<p class='text-muted'>No skills found.</p>";
+
+            // Format Summary (Bullet points)
+            const summaryRaw = data.summary || "No summary available.";
+            const summaryHTML = summaryRaw.includes('•') 
+                ? `<ul class="styled-list">${summaryRaw.split('•').filter(i => i.trim()).map(i => `<li>${i.trim()}</li>`).join('')}</ul>`
+                : `<p>${summaryRaw}</p>`;
+            document.getElementById('detSummary').innerHTML = summaryHTML;
+
+            // Education
+            document.getElementById('detEducation').innerText = data.education_summary || "Education details not available.";
+        });
+    </script>
+</body>
+</html>

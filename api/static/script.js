@@ -83,7 +83,7 @@ document.getElementById('searchForm').addEventListener('submit', async function(
                         <p style="margin-top:10px; color: #888;"><strong>Education:</strong> ${cand.education_summary || 'N/A'}</p>
                     </div>
                     <div class="card-actions">
-                        <a href="${cand.resume_url}" target="_blank" class="btn-link">VIEW FULL PROFILE</a>
+                        <button onclick='viewCandidateDetail(${JSON.stringify(cand).replace(/'/g, "&#39;")})' class="btn-link">VIEW FULL DETAIL</button>
                     </div>
                  `;
                  container.appendChild(card);
@@ -99,3 +99,10 @@ document.getElementById('searchForm').addEventListener('submit', async function(
         status.innerText = "Connection Failed.";
     }
 });
+
+function viewCandidateDetail(candidateData) {
+
+    sessionStorage.setItem('selectedCandidate', JSON.stringify(candidateData));
+
+    window.location.href = '/candidate/detail';
+}

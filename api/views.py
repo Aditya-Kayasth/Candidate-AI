@@ -12,7 +12,7 @@ class CandidateSearchView(APIView):
             "all_words": request.data.get('all_words', '').strip(),
             "experience": request.data.get('experience', '').strip(),
             "location": request.data.get('location', 'India').strip(),
-            "radius": request.data.get('radius', 50),
+            "radius": request.data.get('radius',50),
             "limit": request.data.get('limit', 10)
         }
 
@@ -38,3 +38,7 @@ class CandidateSearchView(APIView):
 
 def dashboard(request):
     return render(request, 'index.html')
+
+
+def candidate_detail(request):
+    return render(request, 'detail.html')
