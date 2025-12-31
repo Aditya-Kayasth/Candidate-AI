@@ -1,100 +1,102 @@
-# Candidate Search API (Django)
 
-A modular REST API designed to source candidate profiles from multiple public platforms.
+# Candidate AI
 
----
-
-## Setup & Installation
-
-1. **Clone the repository**
-
-   ```bash
-   git clone https://gitlab.com/internship-task1/MFP-Task-API-V1.git
-   cd candidate_api
-   ```
-
-2. **Create a virtual environment**
-
-   ```bash
-   python -m venv venv
-
-   # Windows:
-   venv\Scripts\activate
-
-   # macOS / Linux:
-   source venv/bin/activate
-   ```
-
-3. **Install dependencies**
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Run the server**
-   ```bash
-   python manage.py runserver
-   ```
+**Candidate AI** is an intelligent resume search engine and parsing platform. It automates candidate sourcing by scraping public profiles from **PostJobFree**, extracting unstructured data using **Google Gemini 2.5 Flash**, and presenting it in a structured, actionable format for recruiters.
 
 ---
 
-## Websites / APIs Explored & Evaluated
+### Key Features
 
-### PostJobFree.com (Selected)
-
-- **Evaluation:** Identified as an open resume database that permits public search indexing.
-- **Outcome:** Selected as the primary data source. Unlike some other platforms, it allows direct scraping, which helps the API maintain high availability.
-
-### Naukri.com (Partially Integrated)
-
-- **Evaluation:** A primary source of candidate data but direct scraping is prohibited and technically blocked.
-- **Outcome:** Implemented via **Google X-Ray** (`site:naukri.com`) to legally source indexed profiles. This approach can be rate-limited by search engines; more robust tooling (e.g., `curl_cffi` or Selenium) may be needed for long-term stability.
-
-### GitHub User API (Rejected)
-
-- **Evaluation:** Offers a structured, authentication-friendly JSON API for user search.
-- **Outcome:** Rejected for this assignment because it is biased toward technical roles and returns few or no results for non-technical professions (e.g., Marketing, Accounting), failing the requirement for a universal candidate search tool.
-
-### Apna.co, Indeed, & Monster / Foundit (Secondary Sources)
-
-- **Evaluation:** Major job portals with significant candidate data but lacking public developer APIs.
-- **Outcome:** Integrated via **Google X-Ray** to increase data coverage. These sources are dependent on Google's index and share similar rate-limiting challenges as Naukri.
+* **Gen AI Parsing:** Uses **Google Gemini 2.5 Flash** to intelligently extract skills, experience, education, and summaries from raw HTML resumes.
+* **Real-time Scraping:** Fetches live candidate data dynamically from PostJobFree without relying on stale databases.
+* **Filtering:** Search by **Skill** and **Years of Experience** with smart query construction.
+* **Rate Limiting:** Implements sequential processing with auto-throttling to respect API rate limits and ensure stability.
+* **Modern UI:** A professional dark-themed dashboard featuring:
+    * **Expandable Candidate Cards:** Horizontal tabs with "Quick View" summaries.
+    * **Dedicated Detail Page:** A clean, formatted profile view with session-based data storage.
 
 ---
 
-## API Usage
+### Tech Stack
+
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Django](https://img.shields.io/badge/Django-5.0-092E20?style=for-the-badge&logo=django&logoColor=white)
+![Google Gemini](https://img.shields.io/badge/Google%20Gemini-2.5%20Flash-8E75B2?style=for-the-badge&logo=google&logoColor=white)
+![BeautifulSoup](https://img.shields.io/badge/BeautifulSoup-Scraping-BC2F2F?style=for-the-badge)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+
+---
+
+### Local Installation
+
+Follow these steps to set up the project locally.
+
+#### 1. Clone the repository
+```bash
+git clone [https://gitlab.com/yourusername/candidate-scout-ai.git](https://gitlab.com/yourusername/candidate-scout-ai.git)
+cd candidate-scout-ai
+
+```
+
+#### 2. Set up virtual environment
+
+```bash
+# Windows
+python -m venv venv
+venv\Scripts\activate
+
+# macOS/Linux
+python3 -m venv venv
+source venv/bin/activate
+
+```
+
+#### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+
+```
+
+#### 4. Configure Environment Variables
+
+Create a `.env` file in the root directory and add your Google Gemini API key:
+
+```ini
+GEMINI_API_KEY=your_google_api_key_here
+
+```
+
+#### 5. Run the server
+
+```bash
+python manage.py runserver
+
+```
+
+The application will be available at `http://127.0.0.1:8000`.
+
+---
+
+### API Usage
+
+You can also use the backend API directly for integration.
 
 **Endpoint:** `POST /api/candidates/search`
 
-This repository includes a test script to validate the API response without external tools like Postman. Edit the payload in the test script as needed.
-
-### How to test locally
-
-1. Ensure your server is running in one terminal:
-
-   ```bash
-   python manage.py runserver
-   ```
-
-2. Open another terminal and run:
-   ```bash
-   python test_api.py
-   ```
-
-### Example Request
-
-**Body (JSON):**
+**Request Body:**
 
 ```json
 {
-  "skill": "java",
-  "experience": 3
+  "all_words": "Java Developer",
+  "experience": 3,
+  "location": "India",
+  "radius": 50
 }
+
 ```
 
-### Example Response (truncated)
-
-**Body (JSON):**
+**Response:**
 
 ```json
 {
@@ -102,25 +104,28 @@ This repository includes a test script to validate the API response without exte
   "count": 10,
   "candidates": [
     {
-      "source": "PostJobFree",
-      "name": "Candidate (Hidden)",
-      "current_job_title": "Senior Java Developer with Full Stack Experience",
-      "experience_years": "5+ Years",
-      "skills": ["java"],
-      "location": "Bangalore",
-      "resume_url": "https://www.postjobfree.com/resume/ad83"
-    },
-    {
-      "source": "Naukri (via Google)",
       "name": "Rahul V.",
-      "current_job_title": "Java Backend Engineer",
-      "experience_years": "4 Years",
-      "skills": ["java"],
-      "location": "Pune",
-      "resume_url": "https://www.naukri.com/"
+      "current_job_title": "Senior Java Engineer",
+      "experience_years": 5,
+      "skills": ["Java", "Spring Boot", "Microservices"],
+      "location": "Bangalore, India",
+      "resume_url": "[https://postjobfree.com/](https://postjobfree.com/)..."
     }
   ]
 }
+
 ```
 
 ---
+
+### Future Roadmap
+
+* **Proxy Rotation:** Integrate `curl_cffi` to bypass advanced anti-bot protections.
+* **Multi-Source Search:** Expand scraping to include other open resume databases.
+* **Resume Download:** Add functionality to generate PDF summaries of parsed profiles.
+
+---
+
+### License
+
+[MIT License](https://www.google.com/search?q=LICENSE)
