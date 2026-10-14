@@ -1,13 +1,13 @@
 
 # Candidate AI
 
-**Candidate AI** is an intelligent resume search engine and parsing platform. It automates candidate sourcing by scraping public profiles from **PostJobFree**, extracting unstructured data using **Google Gemini 2.5 Flash**, and presenting it in a structured, actionable format for recruiters.
+**Candidate AI** is an intelligent resume search engine and parsing platform. It automates candidate sourcing by scraping public profiles from **PostJobFree**, extracting unstructured data using **Google Gemini 3.6 Flash**, and presenting it in a structured, actionable format for recruiters.
 
 ---
 
 ### Key Features
 
-* **Gen AI Parsing:** Uses **Google Gemini 2.5 Flash** to intelligently extract skills, experience, education, and summaries from raw HTML resumes.
+* **Gen AI Parsing:** Uses **Google Gemini 3.6 Flash** to intelligently extract skills, experience, education, and summaries from raw HTML resumes.
 * **Real-time Scraping:** Fetches live candidate data dynamically from PostJobFree without relying on stale databases.
 * **Filtering:** Search by **Skill** and **Years of Experience** with smart query construction.
 * **Rate Limiting:** Implements sequential processing with auto-throttling to respect API rate limits and ensure stability.
@@ -21,7 +21,7 @@
 
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-5.0-092E20?style=for-the-badge&logo=django&logoColor=white)
-![Google Gemini](https://img.shields.io/badge/Google%20Gemini-2.5%20Flash-8E75B2?style=for-the-badge&logo=google&logoColor=white)
+![Google Gemini](https://img.shields.io/badge/Google%20Gemini-3.6%20Flash-8E75B2?style=for-the-badge&logo=google&logoColor=white)
 ![BeautifulSoup](https://img.shields.io/badge/BeautifulSoup-Scraping-BC2F2F?style=for-the-badge)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 

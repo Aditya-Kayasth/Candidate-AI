@@ -45,7 +45,7 @@ def search_candidates_core(skill, experience, location="remote", limit=5):
         return {"error": "Failed to retrieve candidate data from source."}
 
     # 2. AI Parsing with Retry (Backoff)
-    model = genai.GenerativeModel('gemini-2.5-flash')
+    model = genai.GenerativeModel('gemini-3.6-flash')
     prompt = f"""
     Act as a recruiter. Extract {limit} candidates from this raw text.
     Return ONLY a raw JSON list. No markdown formatting.
