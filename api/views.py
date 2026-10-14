@@ -8,11 +8,14 @@ logger = logging.getLogger(__name__)
 
 class CandidateSearchView(APIView):
     def post(self, request):
+        all_words = str(request.data.get('all_words') or request.data.get('skill') or '').strip()
+        experience = str(request.data.get('experience') or '').strip()
+        location = str(request.data.get('location') or 'India').strip()
         params = {
-            "all_words": request.data.get('all_words', '').strip(),
-            "experience": request.data.get('experience', '').strip(),
-            "location": request.data.get('location', 'India').strip(),
-            "radius": request.data.get('radius',50),
+            "all_words": all_words,
+            "experience": experience,
+            "location": location,
+            "radius": request.data.get('radius', 50),
             "limit": request.data.get('limit', 10)
         }
 
